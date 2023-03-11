@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include qz_tray *.css
+recursive-include qz_tray *.csv
+recursive-include qz_tray *.html
+recursive-include qz_tray *.ico
+recursive-include qz_tray *.js
+recursive-include qz_tray *.json
+recursive-include qz_tray *.md
+recursive-include qz_tray *.png
+recursive-include qz_tray *.py
+recursive-include qz_tray *.svg
+recursive-include qz_tray *.txt
+recursive-exclude qz_tray *.pyc
