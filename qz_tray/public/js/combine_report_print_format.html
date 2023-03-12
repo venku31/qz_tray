@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>{{ doc.patient_name }}</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 10px;
+		}
+		table th, table td {
+			padding: 8px;
+			border: 1px solid #ddd;
+		}
+		table th {
+			background-color: #f5f5f5;
+			font-weight: bold;
+			text-align: left;
+		}
+		table td {
+			text-align: center;
+		}
+		.test-table-container {
+			display: flex;
+			align-items: flex-start;
+			margin-top: 20px;
+		}
+		.test-table-header {
+			flex-basis: 90px;
+			margin-right: 5px;
+			font-weight: bold;
+			font-size:15px;
+		}
+		.test-table {
+			flex-grow: 1;
+		}
+	</style>
+</head>
+<body>
+	<h1>{{ doc.doctype }}</h1>
+	<div class="row">
+  <div class="col-sm-6">
+    <ul>
+      <li><strong>Patient Name:</strong> {{ doc.patient_name }}</li>
+      <li><strong>Date of Birth:</strong> {{ doc.date_of_birth }}</li>
+    {% set dob = doc.date_of_birth  %}
+    {% set now  = frappe.utils.nowdate() %}
+    {% set diff = frappe.utils.date_diff(now, dob) %}
+    {% set year = diff//365 %}
+    {% set month = (diff - (year * 365))//30 %}
+    {% set day = ( (diff - (year * 365)) - (month * 30) ) %}
+      <li><strong>Age: </strong>{{ year }} Years, {{ month }} Months, {{day}} Days</li>
+    </ul>
+  </div>
+  <div class="col-sm-6">
+    <ul>
+      <li><strong>Patient ID:</strong> {{ doc.patient_id }}</li>
+      <li><strong>Blood Group:</strong> {{ doc.blood_group }}</li>
+
+    {% set address_docname = None %}
+    {% set address_docname = frappe.db.get_value('Dynamic Link', {'link_doctype': 'Patient', 'link_name': doc.patient_name}, 'parent') %}
+    {% if address_docname%}
+        {% set address_doc = frappe.get_doc('Address', address_docname) %}
+    {% endif %}
+
+    {% if address_doc %}
+        <br>
+        {% if address_doc.address_line1%}
+            <li><strong>Address: </strong> {{ address_doc.address_line1 }}</li>
+        {% endif %}
+        {% if address_doc.address_line2%}
+            <p><strong>       </strong> {{ address_doc.address_line2 }}</p>
+        {% endif %}
+        {% if address_doc.city%}
+            <p><strong>       </strong> {{ address_doc.city }}</p>
+        {% endif %}
+        {% if address_doc.state%}
+            <p><strong>       </strong> {{ address_doc.state }}</p>
+        {% endif %}
+        {% if address_doc.pincode%}
+            <p><strong>       </strong> {{ address_doc.pincode }}</p>
+        {% endif %}
+    {% endif %}
+
+    </ul>
+  </div>
+</div>
+
+	{% set groups = doc.test_results|groupby('lab_test') %}
+	{% for group in groups %}
+	{% set test_name = group.grouper %}
+	{% set test_results = group.list %}
+	{% if test_results[0].result_value is none %}
+	
+	<div class="test-table-container">
+		<div class="test-table-header">{{ test_name }}</div>
+		<div class="test-table">
+		<table>
+			<thead>
+				<tr>
+			        <th>Test Name</th>
+			        <th>Result Value</th>
+			        <th>UOM</th>
+			        <th>Normal Range</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for test in test_results %}
+				    {% if test.result_value is not none %}
+        				<tr>
+        			        <td>{{ test.lab_test_name }}</td>
+        			        <td>{{ test.result_value }}</td>
+        			        <td>{{ test.lab_test_uom }}</td>
+        			        <td>{{ test.normal_range }}</td>
+        				</tr>
+        			{% endif %}
+				{% endfor %}
+			</tbody>
+		</table>
+		</div>
+		</div>
+	{% endif %}
+	{% endfor %}
+    <div style="margin-top: 190mm; margin-bottom: 1mm; margin-left: 1mm; font-size: 15px;">
+        <div style="display: inline-block; width: 850px; height:100px;  solid black; padding: 5px;">
+            Remarks: <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            
+        
+        </div>
+        <div style="display: inline-block; width: 70px; margin-right:1mm; solid black; padding: 5px;">
+             <p>                                                    Signature: <br></p>
+            </div>
+    </div>
+
+
+</body>
+</html>
