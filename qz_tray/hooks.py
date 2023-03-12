@@ -18,7 +18,11 @@ app_license = "MIT"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/qz_tray/css/qz_tray.css"
-# web_include_js = "/assets/qz_tray/js/qz_tray.js"
+web_include_js = "/assets/qz_tray/js/qz_tray.js"
+# web_include_js = "/public/js/qz_tray.js"
+# web_include_js = {
+#     'frappe/public/js/qz_tray.js': 'QZ Tray'
+# }
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "qz_tray/public/scss/website"
@@ -31,7 +35,7 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {"Sales Invoice" : "public/js/print_qz.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
