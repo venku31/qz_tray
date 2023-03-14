@@ -33,13 +33,13 @@ function printPdf(byteArray) {
 
 function printData(byteArray) {
   // Set the printer name
-  var printerName = "Microsoft Print to PDF";
+  var printerName = "SLK-TE322";
 
   // Create a print job with the PDF data and printer name
   var printJob = qz.printers.getDefault();
   printJob.contentType = "application/pdf";
   printJob.printer = printerName;
-  printJob.title = "My PDF Title";
+  printJob.title = cur_frm.doc.name;
   printJob.data = byteArray;
 
   // Send the print job to the printer
